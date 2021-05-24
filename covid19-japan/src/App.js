@@ -21,8 +21,8 @@ function App() {
         .then((response) => response.json())
         .then((data) => {
           const prefectures = data.map((prefecture) => ({
-            name: prefecture.name_ja, // (Mapped with API data) In english , UnitedState, United Kingdom
-            value: prefecture.name_en, // (Mapped with API) In japanese
+            name: prefecture.name_en, // (Mapped with API data) In english , UnitedState, United Kingdom
+            value: prefecture.id, // (Mapped with API) In japanese
           }));
           setPrefectures(prefectures);
         });
@@ -36,8 +36,10 @@ function App() {
 
     const url =
       prefectureNCode === "japan"
-        ? "https://covid19-japan-web-api.now.sh/api/v1/prefectures"
+        ? "https://covid19-japan-web-api.now.sh/api/v1/total"
         : `https://covid19-japan-web-api.now.sh/api/v1/prefectures/${prefectureNCode}`;
+
+    //`https://covid19-japan-web-api.now.sh/api/v1/prefectures/${prefectureNCode}`
 
     await fetch(url)
       .then((response) => response.json())
@@ -77,17 +79,17 @@ function App() {
           <InfoBox
             title="Coronavirus Cases"
             cases={prefectureInfo.cases}
-            //total={prefectureInfo.}
+            total={2000}
           ></InfoBox>
           <InfoBox
             title="Recovered"
             cases={prefectureInfo.discharge}
-           // total={prefectureInfo.}
+            total={2000}
           ></InfoBox>
           <InfoBox
             title="Deaths"
             cases={prefectureInfo.deaths}
-            //total={prefectureInfo.}
+            total={0}
           ></InfoBox>
         </div>
         {/* Map */}
