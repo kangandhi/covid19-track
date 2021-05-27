@@ -1,13 +1,15 @@
 import React from 'react';
 import "./Table.css"
 
+//get me the prefectures that available. here in props (instead of props, write prefectures)
+// go through all of prefectures & map through them with every single prefecture & return the following. 
 function Table({ prefectures }) {
     return (
         <div className="table">
-            {prefectures.map(({prefecture, cases }) => (
+            {prefectures.map(prefecture => (
                 <tr>
-                    <td>{prefecture}</td> {/* not fetching the data of prfectcutes due to the problem of APP.js */}
-                    <td><strong>{cases}</strong></td>
+                    <td>{prefecture.name_en}</td> 
+                    <td><strong>{prefecture.cases}</strong></td>
                 </tr>
             ))}
         </div>
