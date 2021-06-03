@@ -1,3 +1,4 @@
+//import { registerables } from "chart.js";
 import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import numeral from "numeral";
@@ -6,12 +7,13 @@ const options = {
   legend: {
     display: false,
   },
+
   elements: {
-    point: {
+    points: {
       radius: 0,
     },
   },
-  maintainAspectRatio: false,
+  maintainAspectRation: false,
   tooltips: {
     mode: "index",
     intersect: false,
@@ -47,58 +49,61 @@ const options = {
   },
 };
 
-//https://covid19-japan-web-api.now.sh/api/v1/total?history=true&predict=true
-
-function LineGraph() {
-  const [data, setData] = useState({});
-
-  const buildChartData = (data, casesType = "positive") => {
-    const chartData = [];
-    let lastDataPoint;
-    for (let date in data.positive) {
-      if (lastDataPoint) {
-        const newDataPoint = {
-          x: date,
-          y: data[casesType][date] - lastDataPoint,
-        };
-        chartData.push(newDataPoint);
-      }
-      lastDataPoint = data[casesType][date];
+const buildChartData = (data, casesType) => {
+  const chartData = [];
+  let lastDataPoint;
+  for (let date in data.pcr) {
+    if (lastDataPoint) {
+      const newDataPoint = {
+        x: date,
+        y: data[casesType][date] - lastDataPoint,
+      };
+      chartData.push(newDataPoint);
     }
-    return chartData;
-  };
+    lastDataPoint = data[casesType][date];
+  }
+  return chartData;
+};
+
+//https://covid19-japan-web-api.vercel.app/api/v1/total?history=120
+
+function LineGraph({ casesType = "pcr" }) {
+  const [data, setData] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
-      await fetch(
-        "https://covid19-japan-web-api.now.sh/api/v1/total?history=true&predict=true"
-      )
-        .then((response) => response.json())
+      await fetch("//https://covid19-japan-web-api.vercel.app/api/v1/total?history=true")
+        .then((response) => {
+          return response.json();
+        })
         .then((data) => {
-          console.log(data);
-          const chartData = buildChartData(data, "postive");
+          // clever stuff here...
+          //console.log(data);
+          let chartData = buildChartData(data, "pcr");
           setData(chartData);
+          console.log(chartData);
+          //buildChart(chartData);
         });
     };
     fetchData();
-  }, []);
+  }, [casesType]);
 
   return (
     <div>
-      <h1>I am a graph</h1> 
-      {/* <Line data options /> */}
-      <Line
-        options={options}
-        data={{
-          datasets: [
-            {
-              backgroundColor: "rgba(204, 16, 52, 0.5)",
-              boarderColor: "#CC1034",
-              data: data
-            },
-          ],
-        }}
-      />
+      {data?.length > 0 && (
+        <Line
+          options={options}
+          data={{
+            datasets: [
+              {
+                backgroundColor: "rgba(204, 16, 52, 0.5)",
+                borderColor: "#CC1034",
+                data: data,
+              },
+            ],
+          }}
+        />
+      )}
     </div>
   );
 }
