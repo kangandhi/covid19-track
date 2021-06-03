@@ -11,6 +11,8 @@ import InfoBox from "./InfoBox";
 import Map from "./Map";
 import Table from "./Table";
 import { sortData } from "./util";
+import LineGraph from "./LineGraph";
+
 
 // STATE = how to write a variable in REACT <<<<<<
 //https://covid19-japan-web-api.now.sh/api/v1/prefectures
@@ -32,7 +34,7 @@ function App() {
       });
   }, []);
 
-  // useEffect to fetch cases from each prefectures 
+  // useEffect to fetch cases from each prefectures
   useEffect(() => {
     const getPrefecturesData = async () => {
       await fetch("https://covid19-japan-web-api.now.sh/api/v1/prefectures")
@@ -51,7 +53,7 @@ function App() {
     getPrefecturesData();
   }, []);
 
-  // onPrefectureChange event define in return statement 
+  // onPrefectureChange event define in return statement
   const onPrefectureChange = async (event) => {
     const prefectureID = event.target.value;
     // console.log("YOOOOOOO >>>>>>>>", prefectureID);
@@ -101,28 +103,31 @@ function App() {
         <div className="app__stats">
           <InfoBox
             title="Coronavirus Cases"
-            cases={prefectureInfo.positive} // for all over japan 
+            cases={prefectureInfo.positive} // for all over japan
             // cases={prefectureInfo.cases} // for each prefecture
             //total={2000}
           ></InfoBox>
 
           <InfoBox
             title="Recovered"
-            cases={prefectureInfo.discharge} // for all over japan 
+            cases={prefectureInfo.discharge} // for all over japan
             // cases={prefectureInfo.discharge} // for each prefecture
             //total={2000}
           ></InfoBox>
 
           <InfoBox
             title="Deaths"
-            cases={prefectureInfo.death} // for all over japan 
+            cases={prefectureInfo.death} // for all over japan
             // cases={prefectureInfo.deaths} // for each prefecture
             //total={0}
           ></InfoBox>
         </div>
         {/* Map */}
         <Map />
+        
       </div>
+
+
 
       <Card className="app__right">
         <CardContent>
@@ -130,9 +135,9 @@ function App() {
           <h4>I am a table</h4>
           {/* Table */}
           <Table prefectures={tableData}></Table>
+
           <h3>All over Japan new cases</h3>
-          <h4>I am a graph</h4>
-          {/* Graph */}
+          <LineGraph />
         </CardContent>
       </Card>
     </div>
